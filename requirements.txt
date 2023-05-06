@@ -1,0 +1,9 @@
+alpha-vantage
+pandas
+numpy
+matplotlib
+yfinance
+#python3-psycopg2
+#sudo apt-get -y autoremove python3-psycopg2
+ta
+mplfinance
