@@ -1,25 +1,26 @@
 import psycopg2
-import yfinance as yf
+import json
 
-# Función para conectar a la base de datos Postgres
-def connect_db():
-    conn = psycopg2.connect(
-        host="localhost",
-        database="my_database",
-        user="my_user",
-        password="my_password"
-    )
-    return conn
+class PostgresConnector:
 
-# Función para insertar los datos de cotización en la tabla correspondiente
-def insert_stock_history(conn, data):
-    cur = conn.cursor()
-    for index, row in data.iterrows():
-        cur.execute("""
-            INSERT INTO stock_history (date, open, high, low, close, volume, dividends, stock_splits)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """, (index.date(), row['Open'], row['High'], row['Low'], row['Close'], row['Volume'], row['Dividends'], row['Stock Splits']))
-    conn.commit()
-    cur.close()
+    def __init__(self):
+        self.db_params = self.get_params()
+
+    def get_params():
+        # Load database connection parameters from JSON file
+        with open('db_params.json') as json_file:
+            db_params = json.load(json_file)
+        
 
 
+    # Función para conectar a la base de datos Postgres
+    def connect_db(self):
+        try:
+            conn = psycopg2.connect(**self.db_params)
+            return conn
+        except psycopg2.Error as e:
+            print(f"Error: {e}")
+
+
+    def close_conn(self):
+        self.conn.close()
